@@ -33,16 +33,16 @@ The solution uses a "sweep line" algorithm. Imagining a vertical line moving fro
    - Meeting starts → need +1 room
    - Meeting ends → free -1 room
 
-2. **Sort Timeline**: Put all events in chronological order
+2. Sort Timeline: Put all events in chronological order
 
-3. **Sweep**: Move through time, keeping track of how many rooms we're using. The peak usage is our answer.
+3. Sweep: Move through time, keeping track of how many rooms we're using. The peak usage is the answer.
 
-**Why this works:** At any point in time, the number of active meetings equals the number of rooms needed at that moment.
+So WHY this works?: At any point in time, the number of active meetings equals the number of rooms needed at that moment.
 
-## Algorithm Complexity
+Algorithm Complexity
 
-- **Time**: O(n log n) - mostly due to sorting the events
-- **Space**: O(n) - we store events for each meeting
+- Time: O(n log n) - mostly due to sorting the events
+- Space: O(n) - we store events for each meeting
 
 This is optimal since we need to consider the temporal relationships between all meetings.
 
@@ -50,7 +50,7 @@ This is optimal since we need to consider the temporal relationships between all
 
 The solution includes comprehensive tests covering:
 
-- **Basic scenarios**: overlapping, non-overlapping, adjacent meetings
+- Basic scenarios: overlapping, non-overlapping, adjacent meetings
 - **Edge cases**: empty input, single meeting, zero-duration meetings
 - **Complex patterns**: nested meetings, same start/end times, decimal timestamps
 - **Stress tests**: multiple meetings with various overlap patterns
