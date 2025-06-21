@@ -2,7 +2,7 @@
 
 ## The Problem
 
-Given a list of meetings with start and end times, determine the minimum number of meeting rooms required so that no two meetings overlap in the same room.
+Given a list of meetings with start and end times, the task is to determine the minimum number of meeting rooms required so that no two meetings overlap in the same room.
 
 ## Quick Start
 
