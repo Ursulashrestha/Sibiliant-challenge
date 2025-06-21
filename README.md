@@ -1,19 +1,8 @@
 # Sibiliant-challenge
 
-# Meeting Rooms Challenge 🏢
-
-A coding exercise to find the minimum number of meeting rooms needed to schedule all meetings without conflicts, implemented in Sibilant (a Lisp-like language).
-
 ## The Problem
 
 Given a list of meetings with start and end times, determine the minimum number of meeting rooms required so that no two meetings overlap in the same room.
-
-**Example:**
-
-```
-Meetings: [{start: 9, end: 10}, {start: 9.5, end: 11}, {start: 10, end: 11.5}]
-Answer: 2 rooms needed
-```
 
 ## Quick Start
 
@@ -29,9 +18,8 @@ npm install -g sibilant
 
 ### Running the Code
 
-```bash
-# Save the code as crossbeam.sibilant
 sibilant -x -f meeting-room.sibilant
+
 ```
 
 That's it! The program will run all test cases and show the results.
@@ -70,12 +58,14 @@ The solution includes comprehensive tests covering:
 ## Expected Output
 
 ```
+
 Example meetings: 2
 No overlap meetings: 1
 All at once: 3
 Empty meetings: 0
 Single meeting: 1
 ...
+
 ```
 
 ## About the Solution
@@ -86,3 +76,4 @@ The algorithm handles all edge cases correctly:
 - Multiple meetings at the same time
 - Fractional time values
 - Empty or single-meeting inputs
+```

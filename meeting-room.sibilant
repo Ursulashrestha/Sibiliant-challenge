@@ -1,5 +1,5 @@
 (def minimum-rooms (meetings)
-  ;; Handle edge cases
+  ;; Handles edge cases
   (if (or (= meetings null) (= meetings.length 0))
     0
     (do
