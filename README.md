@@ -57,16 +57,12 @@ The solution includes comprehensive tests covering:
 
 ## Expected Output
 
-```
-
 Example meetings: 2
 No overlap meetings: 1
 All at once: 3
 Empty meetings: 0
 Single meeting: 1
 ...
-
-```
 
 ## About the Solution
 
