@@ -1,30 +1,157 @@
-;; minimum-rooms.sibilant
-;; Main function for calculating minimum meeting rooms needed
-
 (def minimum-rooms (meetings)
-  (if (= (get meetings "length") 0)
+  ;; Handle edge cases
+  (if (or (= meetings null) (= meetings.length 0))
     0
     (do
-      (var starts (.sort (.map meetings (lambda (m) (get m "start")))))
-      (var ends (.sort (.map meetings (lambda (m) (get m "end")))))
-      (var start-i 0)
-      (var end-i 0)
-      (var used-rooms 0)
+      ;; Create events array: each event is [time, type] where type is 1 for start, -1 for end
+      (var events [])
+      
+      ;; Add start and end events for each meeting
+      (each meeting meetings
+        (do
+          (.push events [meeting.start 1])   ;; Start event: +1 room
+          (.push events [meeting.end -1])))  ;; End event: -1 room
+      
+      ;; Sort events by time, with start events (1) before end events (-1) at same time
+      ;; This ensures we allocate rooms before freeing them at the same time
+      (.sort events (lambda (a b)
+        (if (= (get a 0) (get b 0))
+          (- (get b 1) (get a 1))  ;; If same time: start (1) before end (-1)
+          (- (get a 0) (get b 0))))) ;; Otherwise sort by time
+      
+      ;; Process events and track maximum rooms needed
+      (var current-rooms 0)
       (var max-rooms 0)
-
-      (while (< start-i (get starts "length"))
-        (if (and (< end-i (get ends "length")) (< (get starts start-i) (get ends end-i)))
-          (do
-            (set used-rooms (+ used-rooms 1))
-            (set start-i (+ start-i 1)))
-          (do
-            (set used-rooms (- used-rooms 1))
-            (set end-i (+ end-i 1))))
-
-        (if (> used-rooms max-rooms)
-          (set max-rooms used-rooms)))
-
+      
+      (each event events
+        (do
+          (assign current-rooms (+ current-rooms (get event 1)))
+          (assign max-rooms (.max Math max-rooms current-rooms))))
+      
       max-rooms)))
+      
 
-;; Export the function for Node.js
-(set module.exports minimum-rooms)
+;; ORIGINAL TEST CASES
+(var example-meetings
+  [{start 9 end 10}
+   {start 9.5 end 11}
+   {start 10 end 11.5}
+   {start 11 end 12}])
+
+;; The following should print: 2
+(.log console "Example meetings:" (minimum-rooms example-meetings))
+
+(var no-overlap-meetings
+  [{start 8 end 9}
+   {start 9 end 10}
+   {start 10 end 11}])
+
+;; The following should print: 1
+(.log console "No overlap meetings:" (minimum-rooms no-overlap-meetings))
+
+(var all-at-once
+  [{start 8 end 12}
+   {start 8 end 12}
+   {start 8 end 12}])
+
+;; The following should print: 3
+(.log console "All at once:" (minimum-rooms all-at-once))
+
+;; COMPREHENSIVE ADDITIONAL TEST CASES
+
+;; Test Case 1: Empty array
+(var empty-meetings [])
+(.log console "Empty meetings:" (minimum-rooms empty-meetings))
+
+;; Test Case 2: Single meeting
+(var single-meeting [{start 10 end 11}])
+(.log console "Single meeting:" (minimum-rooms single-meeting))
+
+;; Test Case 3: Two overlapping meetings
+(var two-overlap [{start 9 end 11} {start 10 end 12}])
+(.log console "Two overlapping:" (minimum-rooms two-overlap))
+
+;; Test Case 4: Two non-overlapping meetings
+(var two-no-overlap [{start 9 end 10} {start 11 end 12}])
+(.log console "Two non-overlapping:" (minimum-rooms two-no-overlap))
+
+;; Test Case 5: Adjacent meetings (end time = start time of next)
+(var adjacent-meetings 
+  [{start 9 end 10}
+   {start 10 end 11}
+   {start 11 end 12}])
+(.log console "Adjacent meetings:" (minimum-rooms adjacent-meetings))
+
+;; Test Case 6: Complex overlapping pattern
+(var complex-overlap
+  [{start 1 end 5}
+   {start 2 end 6}
+   {start 3 end 7}
+   {start 4 end 8}
+   {start 5 end 9}])
+(.log console "Complex overlap:" (minimum-rooms complex-overlap))
+
+;; Test Case 7: Same start times, different end times
+(var same-start
+  [{start 9 end 10}
+   {start 9 end 11}
+   {start 9 end 12}
+   {start 9 end 13}])
+(.log console "Same start times:" (minimum-rooms same-start))
+
+;; Test Case 8: Same end times, different start times
+(var same-end
+  [{start 8 end 12}
+   {start 9 end 12}
+   {start 10 end 12}
+   {start 11 end 12}])
+(.log console "Same end times:" (minimum-rooms same-end))
+
+;; Test Case 9: Nested meetings
+(var nested-meetings
+  [{start 1 end 10}
+   {start 2 end 9}
+   {start 3 end 8}
+   {start 4 end 7}])
+(.log console "Nested meetings:" (minimum-rooms nested-meetings))
+
+;; Test Case 10: Mixed pattern with decimal times
+(var decimal-times
+  [{start 9.5 end 10.5}
+   {start 10 end 11}
+   {start 10.25 end 11.25}
+   {start 11 end 12}])
+(.log console "Decimal times:" (minimum-rooms decimal-times))
+
+;; Test Case 11: Large number of meetings
+(var many-meetings
+  [{start 1 end 2}
+   {start 1.5 end 2.5}
+   {start 2 end 3}
+   {start 2.5 end 3.5}
+   {start 3 end 4}
+   {start 3.5 end 4.5}
+   {start 4 end 5}])
+(.log console "Many meetings:" (minimum-rooms many-meetings))
+
+;; Test Case 12: Peak usage in middle
+(var peak-middle
+  [{start 1 end 6}
+   {start 2 end 5}
+   {start 3 end 4}
+   {start 7 end 8}])
+(.log console "Peak in middle:" (minimum-rooms peak-middle))
+
+;; Test Case 13: Zero-duration meetings (edge case)
+(var zero-duration
+  [{start 10 end 10}
+   {start 11 end 11}])
+(.log console "Zero duration:" (minimum-rooms zero-duration))
+
+;; Test Case 14: Meetings ending exactly when others start
+(var exact-transitions
+  [{start 8 end 9}
+   {start 9 end 10}
+   {start 9 end 11}
+   {start 10 end 12}])
+(.log console "Exact transitions:" (minimum-rooms exact-transitions))
