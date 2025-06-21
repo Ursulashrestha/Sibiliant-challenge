@@ -26,9 +26,9 @@ That's it! The program will run all test cases and show the results.
 
 ## How It Works
 
-The solution uses a "sweep line" algorithm - imagine a vertical line moving from left to right across a timeline:
+The solution uses a "sweep line" algorithm. Imagining a vertical line moving from left to right across a timeline:
 
-1. **Create Events**: For each meeting, we create two events:
+1. Create Events: For each meeting, we create two events:
 
    - Meeting starts → need +1 room
    - Meeting ends → free -1 room
