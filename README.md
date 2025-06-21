@@ -51,9 +51,9 @@ This is optimal since we need to consider the temporal relationships between all
 The solution includes comprehensive tests covering:
 
 - Basic scenarios: overlapping, non-overlapping, adjacent meetings
-- **Edge cases**: empty input, single meeting, zero-duration meetings
-- **Complex patterns**: nested meetings, same start/end times, decimal timestamps
-- **Stress tests**: multiple meetings with various overlap patterns
+- Edge cases: empty input, single meeting, zero-duration meetings
+- Complex patterns: nested meetings, same start/end times, decimal timestamps
+- Stress tests: multiple meetings with various overlap patterns
 
 ## Expected Output
 
