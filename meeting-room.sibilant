@@ -1,0 +1,30 @@
+;; minimum-rooms.sibilant
+;; Main function for calculating minimum meeting rooms needed
+
+(def minimum-rooms (meetings)
+  (if (= (get meetings "length") 0)
+    0
+    (do
+      (var starts (.sort (.map meetings (lambda (m) (get m "start")))))
+      (var ends (.sort (.map meetings (lambda (m) (get m "end")))))
+      (var start-i 0)
+      (var end-i 0)
+      (var used-rooms 0)
+      (var max-rooms 0)
+
+      (while (< start-i (get starts "length"))
+        (if (and (< end-i (get ends "length")) (< (get starts start-i) (get ends end-i)))
+          (do
+            (set used-rooms (+ used-rooms 1))
+            (set start-i (+ start-i 1)))
+          (do
+            (set used-rooms (- used-rooms 1))
+            (set end-i (+ end-i 1))))
+
+        (if (> used-rooms max-rooms)
+          (set max-rooms used-rooms)))
+
+      max-rooms)))
+
+;; Export the function for Node.js
+(set module.exports minimum-rooms)
